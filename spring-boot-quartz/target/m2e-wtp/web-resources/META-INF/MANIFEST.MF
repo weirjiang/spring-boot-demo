@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Vendor: Pivotal Software, Inc.
+Implementation-Title: spring-boot-quartz Maven Webapp
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: spring-boot-demo
+Build-Jdk: 1.6.0_45
+Built-By: weir
+Created-By: Maven Integration for Eclipse
+Implementation-URL: http://maven.apache.org
+

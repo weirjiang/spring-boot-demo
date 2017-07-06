@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Basic DataGrid - jQuery EasyUI Demo</title>
+<link rel="stylesheet" type="text/css" href="/css/themes/default/easyui.css"></link>
+<link rel="stylesheet" type="text/css" href="/css/themes/icon.css"></link>
+<link rel="stylesheet" type="text/css" href="/css/demo.css"></link>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/plugin/commons.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+</head>
+<body class="easyui-layout" style="overflow-y: hidden">
+	<div id="header" data-options="region:'north',split:false" style="height: 30px; line-height: 30px;">
+		<span style="padding-left: 10px; font-size: 16px;">Spring-boot-Quartz-Sample</span>
+	</div>
+	<!-- 左边菜单导航  -->
+	<div data-options="region:'west',title:'Navigation',iconCls:'icon-tip'" style="width: 220px;">
+		<div class="easyui-accordion" data-options="fit:true,border:false,animate:true,plain:true">
+			<div title="Vegetables" style="padding: 10px;">
+				<ul class="easyui-tree">
+					<li>Tomato</li>
+					<li>Carrot</li>
+					<li>Cabbage</li>
+					<li>Potato</li>
+					<li>Lettuce</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- 中间内容页面  -->
+	<div id="mainPanle" data-options="region:'center'" style="overflow-y: hidden">
+		<div id="centerTab" class="easyui-tabs" style="fit: true; border: false;">
+			<div title="Tab1" style="padding: 0px; display: none;">
+				<!-- Grid -->
+				<div id="toolBar" style="overflow-x:visible;">
+				<div style="padding:5px;background:#fafafa;width:500px;border:1px solid #ccc">
+				    <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="TaskInfo.addTaskInfo()">Add</a>
+				    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="TaskInfo.deleteTaskInfo()">Remove</a>
+				    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="TaskInfo.updateTaskInfo()">Edit</a>
+				</div>
+				<table id="taskinfo-grid"></table>
+				</div>
+				<!-- 窗口Window -->
+				<div id="taskinfoDialog" style="padding:10px 0px; display: none;">
+					<form id="taskinfoForm" class="easyui-form" method="post" data-options="novalidate:true">
+						<table style="width: 450px;margin: 0 auto;">
+							<tr>
+								<td>JobName</td>
+								<td><input class="easyui-textbox" name="jobName" style="width:100%" data-options="required:true"></input></td>
+								<td width="100"></td>
+							</tr>
+							<tr>
+								<td>JobGroup</td>
+								<td>
+									<select class="easyui-combobox" name="jobGroup" style="width:100%;" data-options="required:true">
+										<option value="Job_group">JobGroup</option>
+									</select>
+								</td>
+								<td width="100"></td>
+							</tr>
+							<tr>
+								<td>CronExpression</td>
+								<td>
+									<input class="easyui-textbox" name="cronExpression" data-options="required:true" style="width:100%"></input>
+								</td>
+								<td width="100"></td>
+							</tr>
+							<tr>
+								<td>Description</td>
+								<td colspan="2">
+									<input class="easyui-textbox" name="jobDescription" style="width:100%;height:60px" data-options="multiline:true,required:true"></input>
+									<input type="hidden" name="id" value="0"/>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+(function($) {
+	TaskInfo.init();
+})(jQuery);
+</script>
+</body>
+</html>
