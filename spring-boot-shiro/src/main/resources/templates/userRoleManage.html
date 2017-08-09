@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Basic DataGrid - jQuery EasyUI Demo</title>
+<link rel="stylesheet" type="text/css" href="/css/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/css/themes/icon.css">
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/plugin/commons.js"></script>
+</head>
+<body style="overflow: hidden;">
+	<h2>用户-角色管理</h2>
+	<div style="margin: 20px 0;"></div>
+	<hr style="" color="red"></hr>
+	<div id="toolBar" style="overflow: height:;">
+		<div style="padding: 5px; background: #fafafa; width: 100%; border: 1px solid #ccc">
+			<a class="easyui-linkbutton" iconCls="icon-edit" onclick="userRoleSave()">保存</a>
+		</div>
+		<input type="hidden" id="userId" th:value="${userId}">
+		<table id="mytable" class="easyui-datagrid" title="data grid" style="height: 500px">
+			<thead>
+				<tr>
+					<th field="ck" checkbox="true"></th>
+					<th data-options="field:'id',width:80,align:'center'">id</th>
+					<th data-options="field:'name',width:150,align:'center'">name</th>
+					<th data-options="field:'description',width:150,align:'center'">description</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<script type="text/javascript">
+		$(function() {
+			$("#mytable").datagrid(
+					{
+						url : "/role/list",
+						method : 'post',
+						fitColumns : true,
+						striped : true,
+						fit : true,
+						pagination : true,
+						rownumbers : true,
+						//ctrlSelect : false,
+						singleSelect : false,
+						pageNumber : 0,
+						pageSize : 5,
+						pageList : [ 5, 10, 15, 20 ],
+						border : false,
+						onLoadSuccess : function(data) {
+							if (data) {
+								$.ajax({
+									url : "/user/getRoleIdByUserId",
+									method : "post",
+									data : {
+										userId : $("#userId").val()
+									},
+									dataType : 'json',
+									success : function(result) {
+										if (result.errorCode == 0) {
+											//var rows = $("#mytable").datagrid("getRows");
+
+											$.each(data.rows, function(index,
+													item) {
+												$.each(result.data, function(i,
+														roleId) {
+													if (item.id == roleId) {
+														$('#mytable').datagrid(
+																'checkRow',
+																index);
+													}
+												});
+											});
+										}
+									}
+								});
+								$.each(data.rows, function(index, item) {
+									//alert(item.id);
+
+									/* 							if (item.checked) {
+									 $('#dg').datagrid('checkRow', index);
+									 } */
+								});
+							}
+						}
+					});
+
+		});
+		function userRoleSave() {
+			var rows = $("#mytable").datagrid('getChecked');
+			var roleId = ""
+			if (rows.length > 0) {
+				for (i = 0; i < rows.length; i++) {
+					roleId += ",";
+					roleId += rows[i].id;
+				}
+				$.ajax({
+					url : '/user/userRoleSave',
+					method : 'post',
+					data : {
+						userId : $("#userId").val(),
+						roleIds : roleId
+					},
+					dataType : 'json',
+					success : function(result) {
+						if (result.errorCode == 0) {
+							alert("success");
+						}
+					}
+
+				});
+			} else {
+				return Ext.alert("请选择一行");
+			}
+		}
+	</script>
+</body>
+</html>

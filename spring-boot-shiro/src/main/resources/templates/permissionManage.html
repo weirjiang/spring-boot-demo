@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Basic DataGrid - jQuery EasyUI Demo</title>
+<link rel="stylesheet" type="text/css" href="/css/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/css/themes/icon.css">
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/plugin/commons.js"></script>
+</head>
+<body style="overflow: hidden;">
+	<h2>权限管理</h2>
+	<div style="margin: 20px 0;"></div>
+	<a id="savebtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">保存</a>
+	<hr style="" color="red"></hr>
+	<form>
+		<input  type="hidden" name="roleId" th:value="${roleId}"	 id="roleId">
+		<input  type="hidden" name="menu" id="menu">
+	</form>
+	<ul id="tt" class="easyui-tree">
+
+	</ul>
+</body>
+<script type="text/javascript">
+	var menu = [ {
+		"id" : 1,
+		"text" : "Folder1",
+		"children" : [ {
+			"text" : "File1",
+			"checked" : true
+
+		}, {
+			"text" : "Books",
+			"state" : "open",
+			"attributes" : {
+				"url" : "/demo/book/abc",
+				"price" : 100
+			},
+			"children" : [ {
+				"text" : "PhotoShop",
+				"checked" : true
+			}, {
+				"id" : 8,
+				"text" : "Sub Bookds",
+				"state" : "closed"
+			} ]
+		} ]
+	}, {
+		"text" : "Languages",
+		"state" : "closed",
+		"children" : [ {
+			"text" : "Java"
+		}, {
+			"text" : "C#"
+		} ]
+	} ];
+	$(function() {
+/* 		$.ajax({
+			url : '/permission/listMenu',
+			data:{"roleId":$("#roleId").val()},
+			dataType:"json",  
+			method : 'post'
+		}); */
+		$("#tt").tree({
+			url : '/permission/listMenu',
+			queryParams:{"roleId":$("#roleId").val()},
+			loadFilter : function(data) {
+				if (data.d) {
+					return data.d;
+				} else {
+					return data;
+				}
+			},
+			checkbox:true,
+			onCheck:function(node,checked){
+				alert(node.id+"checked："+checked);
+			}
+		});
+		$("#savebtn").click(function(){
+			var nodes = $('#tt').tree('getChecked');
+			var menuStr = "";
+			for( i=0;i<nodes.length;i++){
+				menuStr +=","
+				menuStr +=nodes[i].id;
+			}
+			if(nodes.length>0){
+				$.ajax({
+					url:'/permission/savePermission',
+					data:{"menus":menuStr,"roleId":$("#roleId").val()},
+					method:'post',
+					dataType:'json',
+					success:function(result){
+						if (result.errorCode == 0) {
+							$("#tt").tree("reload");
+						}
+					}
+				});	
+			}
+
+		});
+	});
+</script>
+</html>

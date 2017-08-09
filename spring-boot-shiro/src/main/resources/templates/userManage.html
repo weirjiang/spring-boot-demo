@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Basic DataGrid - jQuery EasyUI Demo</title>
+<link rel="stylesheet" type="text/css" href="/css/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/css/themes/icon.css">
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/plugin/commons.js"></script>
+</head>
+<body style="overflow: hidden;">
+	<h2>用户管理</h2>
+	<div style="margin: 20px 0;"></div>
+	<hr style="" color="red"></hr>
+	<div id="toolBar" style="overflow:height: ;">
+		<div style="padding: 5px; background: #fafafa; width: 100%; border: 1px solid #ccc">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="formInfo.addFormInfo('add user','/user/save')">Add</a> <a href="#" class="easyui-linkbutton" iconCls="icon-remove"
+				onclick="formInfo.deleteInfo('/user/delete/')">Remove</a> <a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="formInfo.updateInfo('update role','/user/save')">Edit</a>
+				<a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="userRoleManage()">角色配置</a>
+		</div>
+<!-- 	<table id="mytable">
+	</table> -->
+	    <table id="mytable" class="easyui-datagrid" title="data grid" style="height:500px">  
+        <thead>  
+            <tr>  
+                <th data-options="field:'id',width:80,align:'center'">id</th>  
+                <th data-options="field:'name',width:150,align:'center'">name</th>  
+                <th data-options="field:'password',width:150,align:'center'">password</th>  
+            </tr>  
+        </thead>  
+    </table>  
+	</div>
+					<!-- 窗口Window -->
+				<div id="InfoDialog" style="padding:10px 0px; display: none;">
+					<form id="InfoForm" class="easyui-form" method="post" data-options="novalidate:true">
+						<table style="width: 450px;margin: 0 auto;">
+							<tr>
+								<td>name</td>
+								<td><input class="easyui-textbox" name="name" style="width:100%" data-options="required:true"></input></td>
+								<td width="100"></td>
+							</tr>
+							<tr>
+								<td>password</td>
+								<td >
+									<input class="easyui-textbox" name="password" style="width:100%;" data-options="required:true"></input>
+									<input type="hidden" name="id" value="0"/>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+	<script type="text/javascript">
+
+		$(function() {
+			$("#mytable").datagrid({
+				url : "/user/list",
+				method : 'post',
+				fitColumns : true,
+				striped : true,
+				fit : true,
+				pagination : true,
+				rownumbers : true,
+				ctrlSelect : false,
+				singleSelect : true,
+				pageNumber : 0,
+				pageSize : 5,
+				pageList : [ 5, 10, 15, 20 ],
+				border : false
+			});
+
+		});
+		
+		function userRoleManage(){
+			var message = Ext.getSingleSelected(formInfo.grid);
+			if (message) {
+				return Ext.alert(message);
+			}
+			var record = Ext.getRecord(formInfo.grid);
+			var url = '/user/userRoleManage?userId='+record.id;
+			addParentTab('用户角色配置',url);
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiro.dao.mapper.MenuMapper">
+
+	<!-- findAll -->
+	<select id="findByPage" resultType="Menu">
+		select * from menu  order by id desc limit #{0},#{1}
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from menu 
+	</select>
+	<insert id="save" parameterType="Menu">
+		insert into menu (level, name,parent,sort,url)
+		values (
+		#{level}, #{name},#{parent},#{sort},#{url})
+	</insert>
+	<insert id="update" parameterType="Menu">
+		update menu set level = #{level},name=#{name},parent=#{parent},sort=#{sort},url=#{url} where id=#{id}
+	</insert>
+	<delete id="delete" parameterType="int">
+		delete from menu where id=#{id}
+	</delete>
+</mapper>

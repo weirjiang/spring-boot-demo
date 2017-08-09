@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login Form</title>
+<link rel="stylesheet" type="text/css" href="/css/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/css/themes/icon.css">
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery.easyui.min.js"></script>
+<style type="text/css">
+#mainDiv {
+	margin: 0 auto;
+}
+
+.easyui-fluid,.layout {
+	margin: 0 auto;
+}
+
+body {
+	margin: 0 auto;
+	text-align: center;
+}
+
+.panel {
+	border: 0 none;
+	border-radius: 0;
+	margin: 0;
+	overflow: hidden;
+	text-align: left;
+}
+</style>
+</head>
+<body>
+	<h2>Login Form</h2>
+	<p>Fill the form and submit it.</p>
+	<div style="margin: 20px 0;"></div>
+	<div id="mainDiv">
+		<div class="layout" title="New Topic" style="width: 100%; max-width: 400px; padding: 30px 60px; margin: 0 auto;">
+			<form id="ff" method="post" action="/shiro/login">
+				<div style="margin-bottom: 20px">
+					<input id ="username" class="easyui-textbox" name="name" style="width: 100%" data-options="label:'Name:',required:true">
+				</div>
+				<div style="margin-bottom: 20px">
+					<input id="password" class="easyui-passwordbox" name="password" style="width: 100%" data-options="label:'Password:',required:true">
+				</div>
+			</form>
+			<div style="text-align: center; padding: 5px 0">
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm();" style="width: 80px">Submit</a> <a href="javascript:void(0)"
+					class="easyui-linkbutton" onclick="clearForm()" style="width: 80px">Clear</a>
+			</div>
+		</div>
+	</div>
+	<script>
+		function submitForm() {
+			//$('#ff').form('submit');
+			$.ajax({
+				url:"/shiro/login",
+				method:'POST',
+				data:{"name":$("#username").val(),"password":$("#password").val()},
+				dataType:"json",
+				success:function(data){
+					if(data.errorText==0){
+						 location.href="/system/home";
+					}
+				}
+			});
+		}
+		function clearForm() {
+			$('#ff').form('clear');
+		}
+	</script>
+</body>
+</html>

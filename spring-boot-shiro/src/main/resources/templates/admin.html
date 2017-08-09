@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Full Layout - jQuery EasyUI Demo</title>
+<link rel="stylesheet" type="text/css" href="/css/default.css">
+<link rel="stylesheet" type="text/css" href="/css/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/css/themes/icon.css">
+<link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'north',border:false" style="height: 40px; background: #B3DFDA; padding: 10px">
+        <span style="float:right; padding-right:20px;" class="head">欢迎 weir<a href="#" id="editpass">修改密码</a> <a href="/logout" id="loginOut">安全退出</a></span>
+	</div>
+	<div data-options="region:'west',split:true,title:'Menu'" style="width: 150px; padding: 0px;">
+		<div class=""  id="divAcc">
+			<!-- 		<div title="About" data-options="iconCls:'icon-sys'" style="overflow:auto;">
+			<ul>
+				<li><div><a target="mainFrame" href="www.baidu.com"><span class="icon icon-nav"></span>菜单管理</a></div></li>
+				<li><div><a target="mainFrame" href="#"><span class="icon icon-nav"></span>菜单管理</a></div></li>
+			</ul>
+		</div> -->
+		</div>
+	</div>
+	<div data-options="region:'east',split:true,collapsed:true,title:'East'" style="width: 100px; padding: 10px;">east region</div>
+	<div data-options="region:'south',border:false" style="height: 50px; background: #A9FACD; padding: 10px;">south region</div>
+	<div data-options="region:'center',title:'Center'" id="mainPanle">
+		<div id="tabs" class="easyui-tabs" fit="true" border="false" style="overflow: hidden;">
+			<div title="欢迎使用" style="padding: 0px; overflow: hidden;" id="home">
+
+				<h1>Welcome to jQuery UI!</h1>
+			</div>
+		</div>
+	</div>
+		<div id="mm" class="easyui-menu" style="width: 150px;">
+		<div id="mm-tabclose">关闭</div>
+		<div id="mm-tabcloseall">全部关闭</div>
+		<div id="mm-tabcloseother">除此之外全部关闭</div>
+		<div class="menu-sep"></div>
+		<div id="mm-tabcloseright">当前页右侧全部关闭</div>
+		<div id="mm-tabcloseleft">当前页左侧全部关闭</div>
+		<div class="menu-sep"></div>
+		<div id="mm-exit">退出</div>
+	</div>
+</body>
+</html>
