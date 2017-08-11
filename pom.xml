@@ -9,6 +9,8 @@
 	<modules>
 		<module>spring-boot-quartz</module>
 		<module>spring-boot-redis</module>
+		<module>spring-boot-shiro</module>
+		<module>spring-boot-mybatis</module>
 	</modules>
 
 	<parent>
@@ -42,7 +44,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${spring.boot.version}</version>
+			<exclusions><!-- 去掉默认配置 -->
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
 		<dependency>
@@ -50,5 +57,10 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<version>1.5.4.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
 	</dependencies>
+
 </project>

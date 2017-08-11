@@ -6,7 +6,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ImportResource;
 
-@SpringBootApplication
+//@SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
     @Override
