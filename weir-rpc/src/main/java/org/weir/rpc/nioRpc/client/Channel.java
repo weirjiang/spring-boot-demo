@@ -5,6 +5,8 @@ import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.Queue;
 
+import org.weir.rpc.kryoRpc.client.ReqMessage;
+
 public interface Channel<D> {
 	public SocketChannel getSocketChannel();
 	/**
@@ -153,4 +155,6 @@ public interface Channel<D> {
      * @return the write queue if the channel implementor has a inner queue.
      */
     Queue<D> getWriteQueue();
+    
+    void Write(ReqMessage reqMessage);
 }

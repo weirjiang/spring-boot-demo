@@ -1,11 +1,9 @@
 package org.weir.rpc.nioRpc.client;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -27,13 +25,14 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weir.rpc.kryoRpc.client.ReqMessage;
-
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Output;
+import org.weir.rpc.nioRpc.io.DefaultRpcChannel;
+import org.weir.rpc.nioRpc.io.RpcException;
+import org.weir.rpc.nioRpc.protocol.RpcCodecFactory;
+import org.weir.rpc.nioRpc.protocol.model.RpcMessage;
 
 public class NioRpcConnector {
 	protected final ExecutorService executorService = Executors.newFixedThreadPool(5);
-	private Map<Long, NioRpcChannel> channels;
+	private Map<Long, DefaultRpcChannel> channels;
 	private static final AtomicLong ID_GENERATOR = new AtomicLong(0);
 	protected long id;
 	private SocketChannel sc;
@@ -48,7 +47,7 @@ public class NioRpcConnector {
 	private final AtomicReference<ConnectThread> connectThreadRef = new AtomicReference<ConnectThread>()       ;
 	private final Queue<ConnectionCall>          cancelQueue      = new ConcurrentLinkedQueue<ConnectionCall>();
 	public NioRpcConnector(int port) {
-		channels = new ConcurrentHashMap<Long, NioRpcChannel>();
+		channels = new ConcurrentHashMap<Long, DefaultRpcChannel>();
 		this.port = port;
 		address = new InetSocketAddress(HOST, this.port);
 		try {
@@ -126,26 +125,6 @@ public class NioRpcConnector {
 		}
 	}
 
-	public void send(SelectionKey key, ReqMessage reqMessage) throws IOException {
-		SocketChannel channel = (SocketChannel) key.channel();
-
-		Kryo kryo = new Kryo();
-		Output kryoOutput = new Output(sc.socket().getOutputStream());
-		kryo.writeObject(kryoOutput, reqMessage);
-		kryoOutput.flush();
-		System.out.println("[NioRpcConnector] send reqMessage!");
-		// key.interestOps(SelectionKey.OP_READ);
-		try {
-			synchronized (selector) {
-
-				channel.register(selector, SelectionKey.OP_READ);
-			}
-		} catch (ClosedChannelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public void read(SelectionKey key) throws IOException {
 		SocketChannel channel = (SocketChannel) key.channel();
 		ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
@@ -163,40 +142,50 @@ public class NioRpcConnector {
 	}
 
 	public void sendReq(ReqMessage reqMessage) throws IOException {
-		ByteBuffer buffer = ByteBuffer.allocate(4096);
-		long reqId = reqMessage.getId();
-		SocketChannel channel = select(reqId).getSocketChannel();
-		if (channel == null) {
-			throw new NullPointerException("channel is null!");
-		}
-		Kryo kryo = new Kryo();
-	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    Output output = new Output(baos);
-	    kryo.writeObject(output, reqMessage);
-	    output.close();
-	    byte[] bytes =  baos.toByteArray();
-		System.out.println("[NioRpcConnector] send reqMessage!"+bytes.length);
-		buffer.put(bytes);
-		buffer.flip();
-		channel.write(buffer);
-		// key.interestOps(SelectionKey.OP_READ);
-//		try {
-//			synchronized (selector) {
-//
-//				channel.register(selector, SelectionKey.OP_READ);
-//			}
-//		} catch (ClosedChannelException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
+//		ByteBuffer buffer = ByteBuffer.allocate(4096);
+//		long reqId = reqMessage.getId();
+//		SocketChannel channel = select(reqId).getSocketChannel();
+//		if (channel == null) {
+//			throw new NullPointerException("channel is null!");
 //		}
+//		Kryo kryo = new Kryo();
+//	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//	    Output output = new Output(baos);
+//	    kryo.writeObject(output, reqMessage);
+//	    output.close();
+//	    byte[] bytes =  baos.toByteArray();
+//		System.out.println("[NioRpcConnector] send reqMessage!"+bytes.length);
+//		buffer.put(bytes);
+//		buffer.flip();
+//		channel.write(buffer);
+	}
+	
+	public RpcMessage send(RpcMessage req, boolean async) throws RpcException {
+		long mid = req.getId();
+		DefaultRpcChannel channel = select(mid);
+		if (channel == null) throw new RpcException(RpcException.NETWORK, "network error");
+		
+		try {
+			channel.write(req);
+		} catch (RpcException e) {
+			throw e;
+		} catch (IOException e) {
+			throw new RpcException(RpcException.NETWORK, "network error", e); 
+		} catch (Exception e) {
+			throw new RpcException(RpcException.UNKNOWN, "unknown error", e);
+		}
+		return null;
 	}
 	public long connect() throws Exception   {
 		try {
 			Future<Channel<byte[]>> future = connect(address);
 			Channel<byte[]> channel = future.get(Integer.MAX_VALUE, TimeUnit.MILLISECONDS);
 			NioRpcChannel rpcChannel = new NioRpcChannel(channel.getSocketChannel());
+			DefaultRpcChannel defaultRpcChannel = new DefaultRpcChannel();
+			defaultRpcChannel.setChannel(channel);
+			defaultRpcChannel.setEncoder(RpcCodecFactory.newRpcEncoder());
 			long id = ID_GENERATOR.incrementAndGet();
-			channels.put(id,rpcChannel);
+			channels.put(id,defaultRpcChannel);
 			System.out.println("connect finished");
 			System.out.println("channels"+channels.values());
 			LOG.debug("[CRAFT-ATOM-RPC] Rpc client connector established connection, |channel={}|.", rpcChannel);
@@ -206,13 +195,13 @@ public class NioRpcConnector {
 			throw e;
 		}
 	}
-	private NioRpcChannel select(long id) {
-		Collection<NioRpcChannel> collection = channels.values();
+	private DefaultRpcChannel select(long id) {
+		Collection<DefaultRpcChannel> collection = channels.values();
 		Object[] chs = collection.toArray();
 		if (chs.length == 0)
 			return null;
 		int i = (int) (Math.abs(id) % chs.length);
-		return (NioRpcChannel) chs[i];
+		return (DefaultRpcChannel) chs[i];
 	}
 	
 	public Future<Channel<byte[]>> connect(String ip, int port) throws IOException {

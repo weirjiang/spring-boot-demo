@@ -6,6 +6,8 @@ import java.nio.channels.SocketChannel;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.weir.rpc.kryoRpc.client.ReqMessage;
+
 
 public class NioRpcChannel implements Channel<byte[]>{
 	private static final AtomicLong ID_GENERATOR = new AtomicLong(0);
@@ -119,5 +121,11 @@ public class NioRpcChannel implements Channel<byte[]>{
 	}
 	public void setSocketChannel(SocketChannel socketChannel) {
 		this.socketChannel = socketChannel;
+	}
+
+	@Override
+	public void Write(ReqMessage reqMessage) {
+		// TODO Auto-generated method stub
+		
 	}
 }
