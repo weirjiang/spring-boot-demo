@@ -3,9 +3,9 @@ package org.weir.rpc;
 import java.lang.reflect.Method;
 
 import org.weir.rpc.api.RpcService;
-import org.weir.rpc.client.jsonRpc.JsonBean;
-import org.weir.rpc.client.jsonRpc.typeAdapter.ClassTypeAdapter;
-import org.weir.rpc.client.jsonRpc.typeAdapter.ClassTypeAdapterFactory;
+import org.weir.rpc.jsonRpc.client.JsonBean;
+import org.weir.rpc.jsonRpc.client.typeAdapter.ClassTypeAdapter;
+import org.weir.rpc.jsonRpc.client.typeAdapter.ClassTypeAdapterFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

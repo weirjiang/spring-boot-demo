@@ -6,9 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.weir.rpc.api.RpcService;
 import org.weir.rpc.api.impl.RpcServiceImpl;
-import org.weir.rpc.client.nioRpc.NioRpcClient;
-import org.weir.rpc.client.nioRpc.NioRpcFactory;
-import org.weir.rpc.server.nioRpc.NioRpcServer;
+import org.weir.rpc.nioRpc.client.NioRpcClient;
+import org.weir.rpc.nioRpc.client.NioRpcFactory;
+import org.weir.rpc.nioRpc.server.NioRpcServer;
 
 public class TestNioRpc {
 	private static NioRpcClient nioRpcClient;

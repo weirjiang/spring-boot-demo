@@ -2,11 +2,11 @@ package org.weir.rpc;
 
 import java.io.IOException;
 
+import org.weir.rpc.BioRpc.client.BIOClient;
+import org.weir.rpc.BioRpc.server.BIOServer;
+import org.weir.rpc.BioRpc.server.BIOServiceCenter;
 import org.weir.rpc.api.RpcService;
 import org.weir.rpc.api.impl.RpcServiceImpl;
-import org.weir.rpc.client.BIOClient;
-import org.weir.rpc.server.BIOServer;
-import org.weir.rpc.server.BIOServiceCenter;
 
 public class TestBIORpc {
 	public static void main(String[] args) throws IOException {

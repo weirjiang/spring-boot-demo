@@ -4,10 +4,10 @@ import java.io.IOException;
 
 import org.weir.rpc.api.RpcService;
 import org.weir.rpc.api.impl.RpcServiceImpl;
-import org.weir.rpc.client.kryoRpc.KryoRpcClient;
-import org.weir.rpc.client.kryoRpc.KryoRpcClientCenter;
-import org.weir.rpc.server.kryoRpc.KryoRpcServer;
-import org.weir.rpc.server.kryoRpc.KryoRpcServerCenter;
+import org.weir.rpc.kryoRpc.client.KryoRpcClient;
+import org.weir.rpc.kryoRpc.client.KryoRpcClientCenter;
+import org.weir.rpc.kryoRpc.server.KryoRpcServer;
+import org.weir.rpc.kryoRpc.server.KryoRpcServerCenter;
 
 public class TestKryoRpc {
 	public static void main(String args[]) {

@@ -6,11 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.weir.rpc.api.RpcService;
 import org.weir.rpc.api.impl.RpcServiceImpl;
-import org.weir.rpc.client.jsonRpc.JsonClient;
-import org.weir.rpc.client.jsonRpc.JsonRpcClient;
-import org.weir.rpc.client.jsonRpc.JsonRpcClientCenter;
-import org.weir.rpc.server.jsonRpc.JsonRpcServer;
-import org.weir.rpc.server.jsonRpc.JsonRpcServerCenter;
+import org.weir.rpc.jsonRpc.client.JsonClient;
+import org.weir.rpc.jsonRpc.client.JsonRpcClient;
+import org.weir.rpc.jsonRpc.client.JsonRpcClientCenter;
+import org.weir.rpc.jsonRpc.server.JsonRpcServer;
+import org.weir.rpc.jsonRpc.server.JsonRpcServerCenter;
 
 public class TestJsonRpc {
 	static JsonRpcClient jsonRpcClient = null;
