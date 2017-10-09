@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.SoftReference;
 
-import org.junit.Assert;
 import org.weir.rpc.nioRpc.protocol.model.RpcBody;
 import org.weir.rpc.nioRpc.protocol.model.RpcMethod;
 

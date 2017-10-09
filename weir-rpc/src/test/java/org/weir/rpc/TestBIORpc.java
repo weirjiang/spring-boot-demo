@@ -21,7 +21,7 @@ public class TestBIORpc {
 				}
 			}
 		}).start();
-		BIOClient bioClient = new BIOClient(8089);
+		BIOClient bioClient = new BIOClient(8088);
 		
 		RpcService service = (RpcService) bioClient.getProxy(RpcService.class);
 		System.out.println(service.hello("hello"));

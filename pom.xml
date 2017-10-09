@@ -17,6 +17,7 @@
     <module>spring-boot-dubbo-provider</module>
     <module>spring-boot-dubbo-consumer</module>
     <module>weir-rpc</module>
+    <module>spring-boot-demo-test</module>
   </modules>
 
 	<parent>
