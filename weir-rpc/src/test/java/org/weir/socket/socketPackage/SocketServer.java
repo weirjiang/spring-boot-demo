@@ -25,9 +25,25 @@ public class SocketServer {
 			e.printStackTrace();
 		}
 	}
-
+	  
+    /**  
+     * byte[]转int  
+     * @param bytes  
+     * @return  
+     */  
+    public static int byteArrayToInt(byte[] bytes) {  
+           int value=0;  
+           //由高位到低位  
+           for(int i = 0; i < 4; i++) {  
+               int shift= (4-1-i) * 8;  
+               value +=(bytes[i] & 0x000000FF) << shift;//往高位游  
+           }  
+           return value;  
+     } 
+    
+    
 	static class ReceiveThread extends Thread {
-		public static final int PACKET_HEAD_LENGTH=2;//包头长度
+		public static final int PACKET_HEAD_LENGTH=4;//包头长度
 		private Socket socket;
 		private volatile byte[] bytes = new byte[0];
 
@@ -67,9 +83,12 @@ public class SocketServer {
 					// 下面这个值请注意，一定要取2长度的字节子数组作为报文长度，你懂得
 					byte[] temp = new byte[0];
 					temp = mergebyte(temp, bytes, 0, PACKET_HEAD_LENGTH);
-					String templength = new String(temp);
-					int bodylength = Integer.parseInt(templength);//包体长度
+//					String templength = new String(temp);
+//					int bodylength = Integer.parseInt(templength);//包体长度
+					int bodylength = byteArrayToInt(temp);//包体长度
+
 					if (bytes.length - PACKET_HEAD_LENGTH < bodylength) {//不够一个包
+						
 						byte[] body = new byte[bodylength + PACKET_HEAD_LENGTH - bytes.length];//剩下应该读的字节(凑一个包)
 						int couter = reader.read(body);
 						if (couter < 0) {
